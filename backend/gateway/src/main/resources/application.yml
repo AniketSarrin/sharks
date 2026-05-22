@@ -1,0 +1,83 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: auth-service
+              uri: ${gateway.service.auth-uri}
+              predicates:
+                - Path=/api/v1/auth/**
+            - id: user-service-users
+              uri: ${gateway.service.user-uri}
+              predicates:
+                - Path=/api/v1/users/**
+            # Separate routes (instead of comma-separated Path) so predicates always bind reliably across YAML/env layers.
+            - id: user-service-admins
+              uri: ${gateway.service.user-uri}
+              predicates:
+                - Path=/api/v1/admins/**
+            - id: user-service-organizers
+              uri: ${gateway.service.user-uri}
+              predicates:
+                - Path=/api/v1/organizers/**
+            - id: user-service-attendees
+              uri: ${gateway.service.user-uri}
+              predicates:
+                - Path=/api/v1/attendees/**
+            - id: user-service-organizations
+              uri: ${gateway.service.user-uri}
+              predicates:
+                - Path=/api/organizations/**
+            - id: events-service
+              uri: ${gateway.service.event-uri}
+              predicates:
+                - Path=/api/events/**
+            - id: ticketing-service
+              uri: ${gateway.service.ticketing-uri}
+              predicates:
+                - Path=/api/tickets/**
+            - id: admin-service
+              uri: ${gateway.service.admin-uri}
+              predicates:
+                - Path=/api/admin/**
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowed-origin-patterns:
+                  - "*"
+                allowed-methods:
+                  - GET
+                  - POST
+                  - PUT
+                  - PATCH
+                  - DELETE
+                  - OPTIONS
+                allowed-headers:
+                  - Authorization
+                  - Content-Type
+                  - Accept
+                  - X-Requested-With
+                allow-credentials: true
+                max-age: 3600
+
+# Local defaults — user/admin host ports align with USER_SERVICE_PORT / ADMIN_SERVICE_PORT (Compose / .env).
+# Override URIs wholesale with GATEWAY_SERVICE_*_URI when the gateway runs in Docker.
+gateway:
+  service:
+    auth-uri: http://localhost:8085
+    user-uri: ${GATEWAY_SERVICE_USER_URI:http://localhost:${USER_SERVICE_PORT:8081}}
+    event-uri: http://localhost:8082
+    ticketing-uri: http://localhost:8084
+    admin-uri: ${GATEWAY_SERVICE_ADMIN_URI:http://localhost:${ADMIN_SERVICE_PORT:8083}}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

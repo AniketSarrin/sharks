@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway
+  namespace: sharks
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: gateway
+  template:
+    metadata:
+      labels:
+        app: gateway
+    spec:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: gateway
+      containers:
+        - name: gateway
+          # Replace ACCOUNT_ID and REGION with your ECR repository URI components.
+          image: 111111111111.dkr.ecr.us-east-1.amazonaws.com/sharks/gateway:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              name: http
+          env:
+            - name: SERVER_PORT
+              value: "8080"
+            - name: GATEWAY_SERVICE_AUTH_URI
+              value: http://auth.sharks.svc.cluster.local:8080
+            - name: GATEWAY_SERVICE_USER_URI
+              value: http://user.sharks.svc.cluster.local:8080
+            - name: GATEWAY_SERVICE_EVENT_URI
+              value: http://events.sharks.svc.cluster.local:8080
+            - name: GATEWAY_SERVICE_TICKETING_URI
+              value: http://ticketing.sharks.svc.cluster.local:8080
+            - name: GATEWAY_SERVICE_ADMIN_URI
+              value: http://admin.sharks.svc.cluster.local:8080
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: "1"
+              memory: 512Mi
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: http
+            initialDelaySeconds: 50
+            periodSeconds: 30

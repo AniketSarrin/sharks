@@ -1,0 +1,36 @@
+name: sharks
+
+# Event & ticketing API + shared backend infra (from ../docker-compose.yml).
+# From this folder: docker compose up -d --build
+
+include:
+  - path: ../docker-compose.yml
+
+services:
+  event-and-ticketing:
+    build: .
+    networks:
+      - sharks-infra
+    depends_on:
+      event-postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - "${EVENT_SERVICE_PORT:-8082}:8080"
+    environment:
+      SERVER_PORT: "8080"
+      SPRING_DATASOURCE_URL: jdbc:postgresql://event-postgres:5432/events
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      # OIDC discovery endpoint used to resolve issuer and JWKS for token verification
+      SUPABASE_OIDC_DISCOVERY_URL: ${SUPABASE_OIDC_DISCOVERY_URL:-}
+      # Supabase Storage S3-compatible API (JPEG uploads — fill in for image support)
+      SUPABASE_STORAGE_URL: ${SUPABASE_STORAGE_URL:-}
+      SUPABASE_STORAGE_BUCKET: ${SUPABASE_STORAGE_BUCKET:-event-images}
+      SUPABASE_STORAGE_ACCESS_KEY: ${SUPABASE_STORAGE_ACCESS_KEY:-}
+      SUPABASE_STORAGE_SECRET_KEY: ${SUPABASE_STORAGE_SECRET_KEY:-}
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: "5672"
+      RABBITMQ_USERNAME: ${RABBITMQ_USERNAME:-guest}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-guest}

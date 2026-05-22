@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.gen.auth.service.AuthServiceTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-05-06T05:33:37.729Z" hostname="ANKUSH_WOLFY" time="0.169">
+  <properties/>
+  <testcase name="deleteUser_supabaseSuccess_deletesRoles()" classname="com.gen.auth.service.AuthServiceTest" time="0.157"/>
+  <testcase name="deleteUser_supabaseOtherError_doesNotDeleteRoles()" classname="com.gen.auth.service.AuthServiceTest" time="0.003"/>
+  <testcase name="deleteUserByEmail_userNotFound_noDeleteIsAttempted()" classname="com.gen.auth.service.AuthServiceTest" time="0.003"/>
+  <testcase name="deleteUserByEmail_userFound_deletesResolvedUser()" classname="com.gen.auth.service.AuthServiceTest" time="0.002"/>
+  <testcase name="deleteUser_supabase404_stillDeletesRoles()" classname="com.gen.auth.service.AuthServiceTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

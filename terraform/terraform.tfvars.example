@@ -1,0 +1,29 @@
+project_name = "sharks"
+environment  = "dev"
+aws_region   = "us-east-1"
+
+vpc_cidr           = "10.0.0.0/16"
+kubernetes_version = "1.31"
+
+# Node group sizing. t3.medium = 2 vCPU / 4 GiB RAM. Two nodes fit ~6 Spring
+# pods + RabbitMQ + 3 Postgres comfortably. Bump node_max_size if your HPAs
+# scale up.
+node_instance_types = ["t3.medium"]
+node_capacity_type  = "ON_DEMAND"
+node_min_size       = 2
+node_max_size       = 4
+node_desired_size   = 2
+node_disk_size      = 30
+
+# Lock this down to your office / VPN CIDR for any non-dev cluster.
+# Example: ["203.0.113.10/32"]
+cluster_endpoint_public_access_cidrs = ["0.0.0.0/0"]
+
+# --- External services (not provisioned by Terraform) ---
+# The events service uploads event cover images to Supabase Storage via its
+# S3-compatible API. Supabase hosts the bucket — no AWS S3 resource is created
+# here. Populate the `sharks-app-creds` Kubernetes secret (in the `sharks`
+# namespace) with the storage URL, bucket name, access key and secret key
+# before rolling out the events deployment. See the
+# `events_supabase_storage_setup_hint` Terraform output for the exact
+# `kubectl patch` command.

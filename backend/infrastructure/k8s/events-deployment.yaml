@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: events
+  namespace: sharks
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: events
+  template:
+    metadata:
+      labels:
+        app: events
+    spec:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: events
+      containers:
+        - name: events
+          # Replace ACCOUNT_ID and REGION with your ECR repository URI components.
+          image: 111111111111.dkr.ecr.us-east-1.amazonaws.com/sharks/events:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              name: http
+          env:
+            - name: SERVER_PORT
+              value: "8080"
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://event-postgres:5432/events
+            - name: SPRING_DATASOURCE_USERNAME
+              value: postgres
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sharks-infra-creds
+                  key: postgres-password
+            - name: SUPABASE_OIDC_DISCOVERY_URL
+              valueFrom:
+                secretKeyRef:
+                  name: sharks-app-creds
+                  key: supabase-oidc-discovery-url
+            # Supabase Storage (S3-compatible) — used by SupabaseStorageService to
+            # upload JPEG event cover images and apply the public-read bucket policy.
+            - name: SUPABASE_STORAGE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: sharks-app-creds
+                  key: supabase-storage-url
+            - name: SUPABASE_STORAGE_BUCKET
+              valueFrom:
+                secretKeyRef:
+                  name: sharks-app-creds
+                  key: supabase-storage-bucket
+            - name: SUPABASE_STORAGE_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: sharks-app-creds
+                  key: supabase-storage-access-key
+            - name: SUPABASE_STORAGE_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: sharks-app-creds
+                  key: supabase-storage-secret-key
+            - name: RABBITMQ_HOST
+              value: rabbitmq.sharks.svc.cluster.local
+            - name: RABBITMQ_PORT
+              value: "5672"
+            - name: RABBITMQ_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: sharks-infra-creds
+                  key: rabbitmq-username
+            - name: RABBITMQ_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sharks-infra-creds
+                  key: rabbitmq-password
+          # Memory limits raised vs. other services because event creation now
+          # buffers JPEG bytes in memory before uploading to Supabase Storage.
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+          readinessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 45
+            periodSeconds: 30
+            timeoutSeconds: 5

@@ -1,0 +1,87 @@
+name: sharks
+
+# Shared infra: RabbitMQ + Postgres for user and event services.
+# Apps: see docker-compose.yml in auth/, user_and_organizations/, events/, ticketing/.
+# AMQP: localhost:5672 | Management: http://localhost:15672
+
+services:
+  rabbitmq:
+    build:
+      context: ./infrastructure
+      dockerfile: Dockerfile
+    image: sharks-rabbitmq:local
+    container_name: sharks-rabbitmq
+    networks:
+      - sharks-infra
+    ports:
+      - "${RABBITMQ_PORT:-5672}:5672"
+      - "${RABBITMQ_MANAGEMENT_PORT:-15672}:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USERNAME:-guest}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-guest}
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  user-postgres:
+    image: postgres:16-alpine
+    networks:
+      - sharks-infra
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: sharks
+    volumes:
+      - user-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d sharks"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  event-postgres:
+    image: postgres:16-alpine
+    networks:
+      - sharks-infra
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: events
+    volumes:
+      - event-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d events"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  ticketing-postgres:
+    image: postgres:16-alpine
+    networks:
+      - sharks-infra
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ticketing
+    volumes:
+      - ticketing-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d ticketing"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+networks:
+  sharks-infra:
+    name: sharks-infra
+
+volumes:
+  rabbitmq-data:
+  user-postgres-data:
+  event-postgres-data:
+  ticketing-postgres-data:

@@ -1,0 +1,59 @@
+API Endpoints Overview
+Authentication
+
+
+GET /api/auth/me - Get current user
+POST   /api/v1/auth/register
+POST   /api/v1/auth/login
+POST   /api/v1/auth/logout
+POST   /api/v1/auth/refresh-token
+POST   /api/v1/auth/verify-email
+GET    /api/v1/users/me/role
+POST   /api/v1/users/{userId}/role        (admin assigns role)
+PATCH  /api/v1/users/{userId}/role
+
+
+Events
+
+GET /api/events/:location, date, Category,  - Get multiple events on params
+GET /api/events/organizer/:organizerId - Get all events by organizer id (UUID, paged)
+POST /api/events - Create event (Organizer/Admin)
+GET /api/events/:id - Get single event
+PUT /api/events/:id - Update event (Owner/Admin)
+DELETE /api/events/:id - Delete event (Owner/Admin)
+
+Event for organization
+
+
+
+Tickets
+
+POST /api/tickets/purchase - Purchase tickets
+GET /api/tickets/my-tickets - Get user's tickets
+
+User
+
+GET    /api/v1/users/me
+PUT    /api/v1/users/me
+PATCH  /api/v1/users/me
+DELETE /api/v1/users/me
+
+Organizations
+
+GET /api/organizations - Get all organizations
+POST /api/organizations - Create organization (requires JWT auth)
+GET /api/organizations/:id - Get single organization
+GET /api/v1/users/me/events-created - Get user's created organizations (requires JWT auth)
+GET /api/events/attendees/:id - Get attendees
+
+Admin
+
+GET /api/admin/dashboard - Get dashboard statistics
+GET /api/admin/users - Get all users
+GET /api/admin/events - Get all events
+GET /api/admin/user_ticket/:user_id, ticket_id
+POST /api/admin/user_ticket/:user_id, ticket_id
+
+Customer
+GET    /api/v1/users/me/events-attending
+GET    /api/v1/users/me/events/history

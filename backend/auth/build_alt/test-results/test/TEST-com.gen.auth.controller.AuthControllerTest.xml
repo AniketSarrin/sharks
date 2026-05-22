@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.gen.auth.controller.AuthControllerTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-05-06T05:33:36.956Z" hostname="ANKUSH_WOLFY" time="0.729">
+  <properties/>
+  <testcase name="login_ok_returnsSession()" classname="com.gen.auth.controller.AuthControllerTest" time="0.248"/>
+  <testcase name="login_supabaseUnauthorized_returns401()" classname="com.gen.auth.controller.AuthControllerTest" time="0.039"/>
+  <testcase name="login_validationError_returns400()" classname="com.gen.auth.controller.AuthControllerTest" time="0.034"/>
+  <system-out><![CDATA[2026-05-05T22:33:36.958-07:00  INFO 81380 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.gen.auth.controller.AuthControllerTest]: AuthControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-05-05T22:33:36.980-07:00  INFO 81380 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.gen.auth.AuthApplication for test class com.gen.auth.controller.AuthControllerTest
+2026-05-05T22:33:36.981-07:00  INFO 81380 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.gen.auth.controller.AuthControllerTest]: AuthControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-05-05T22:33:36.988-07:00  INFO 81380 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.gen.auth.AuthApplication for test class com.gen.auth.controller.AuthControllerTest
+2026-05-05T22:33:36.994-07:00  INFO 81380 --- [ntContainer#0-2] o.s.a.r.l.SimpleMessageListenerContainer : Waiting for workers to finish.
+2026-05-05T22:33:36.994-07:00  INFO 81380 --- [ntContainer#1-2] o.s.a.r.l.SimpleMessageListenerContainer : Waiting for workers to finish.
+2026-05-05T22:33:36.994-07:00  INFO 81380 --- [ntContainer#0-2] o.s.a.r.l.SimpleMessageListenerContainer : Successfully waited for workers to finish.
+2026-05-05T22:33:36.994-07:00  INFO 81380 --- [ntContainer#1-2] o.s.a.r.l.SimpleMessageListenerContainer : Successfully waited for workers to finish.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.0.6)
+
+2026-05-05T22:33:37.022-07:00  INFO 81380 --- [    Test worker] c.g.auth.controller.AuthControllerTest   : Starting AuthControllerTest using Java 25.0.2 with PID 81380 (started by makhi in D:\SanJose\sem1\202\project_2\backend\auth)
+2026-05-05T22:33:37.023-07:00  INFO 81380 --- [    Test worker] c.g.auth.controller.AuthControllerTest   : No active profile set, falling back to 1 default profile: "default"
+2026-05-05T22:33:37.329-07:00  INFO 81380 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-05-05T22:33:37.330-07:00  INFO 81380 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-05-05T22:33:37.331-07:00  INFO 81380 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2026-05-05T22:33:37.346-07:00  INFO 81380 --- [    Test worker] c.g.auth.controller.AuthControllerTest   : Started AuthControllerTest in 0.348 seconds (process running for 8.075)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

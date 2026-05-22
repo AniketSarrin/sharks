@@ -1,0 +1,206 @@
+{
+  "rabbit_version": "3.13",
+  "vhosts": [
+    { "name": "/" }
+  ],
+  "users": [
+    {
+      "name": "guest",
+      "password": "guest",
+      "tags": ["administrator"]
+    }
+  ],
+  "permissions": [
+    {
+      "user": "guest",
+      "vhost": "/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    }
+  ],
+
+  "exchanges": [
+    {
+      "name": "sharks.auth",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "sharks.user",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "sharks.event",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "sharks.payment",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    }
+  ],
+
+  "queues": [
+    {
+      "name": "auth.user.created",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "auth.user.deleted",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+
+    {
+      "name": "user.ticket.confirmed",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "user.ticket.cancelled",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "user.event.cancelled",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "user.event.created",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+
+    {
+      "name": "event.payment.completed",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "event.payment.failed",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "event.user.deleted",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    }
+  ],
+
+  "bindings": [
+    {
+      "source": "sharks.user",
+      "vhost": "/",
+      "destination": "auth.user.created",
+      "destination_type": "queue",
+      "routing_key": "user.created",
+      "arguments": {}
+    },
+    {
+      "source": "sharks.user",
+      "vhost": "/",
+      "destination": "auth.user.deleted",
+      "destination_type": "queue",
+      "routing_key": "user.deleted",
+      "arguments": {}
+    },
+
+    {
+      "source": "sharks.event",
+      "vhost": "/",
+      "destination": "user.ticket.confirmed",
+      "destination_type": "queue",
+      "routing_key": "ticket.confirmed",
+      "arguments": {}
+    },
+    {
+      "source": "sharks.event",
+      "vhost": "/",
+      "destination": "user.ticket.cancelled",
+      "destination_type": "queue",
+      "routing_key": "ticket.cancelled",
+      "arguments": {}
+    },
+    {
+      "source": "sharks.event",
+      "vhost": "/",
+      "destination": "user.event.cancelled",
+      "destination_type": "queue",
+      "routing_key": "event.cancelled",
+      "arguments": {}
+    },
+    {
+      "source": "sharks.event",
+      "vhost": "/",
+      "destination": "user.event.created",
+      "destination_type": "queue",
+      "routing_key": "event.created",
+      "arguments": {}
+    },
+
+    {
+      "source": "sharks.payment",
+      "vhost": "/",
+      "destination": "event.payment.completed",
+      "destination_type": "queue",
+      "routing_key": "payment.completed",
+      "arguments": {}
+    },
+    {
+      "source": "sharks.payment",
+      "vhost": "/",
+      "destination": "event.payment.failed",
+      "destination_type": "queue",
+      "routing_key": "payment.failed",
+      "arguments": {}
+    },
+    {
+      "source": "sharks.user",
+      "vhost": "/",
+      "destination": "event.user.deleted",
+      "destination_type": "queue",
+      "routing_key": "user.deleted",
+      "arguments": {}
+    }
+  ]
+}

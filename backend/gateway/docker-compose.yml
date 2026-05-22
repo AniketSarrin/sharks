@@ -1,0 +1,25 @@
+name: sharks
+
+# API gateway (port 8080) + shared infra (../docker-compose.yml).
+# Other app services (auth, user, events, ticketing, admin) must be on the same Docker network
+# (sharks-infra) for these hostnames to resolve.
+#
+# From this folder: docker compose up -d --build
+
+include:
+  - path: ../docker-compose.yml
+
+services:
+  gateway:
+    build: .
+    networks:
+      - sharks-infra
+    ports:
+      - "${GATEWAY_PORT:-8080}:8080"
+    environment:
+      SERVER_PORT: "8080"
+      GATEWAY_SERVICE_AUTH_URI: http://auth-api:8080
+      GATEWAY_SERVICE_USER_URI: http://user-and-organizations:8080
+      GATEWAY_SERVICE_EVENT_URI: http://event-and-ticketing:8080
+      GATEWAY_SERVICE_TICKETING_URI: http://ticketing:8080
+      GATEWAY_SERVICE_ADMIN_URI: http://admin-service:8080

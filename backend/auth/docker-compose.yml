@@ -1,0 +1,45 @@
+# Spring auth-api using Supabase Cloud.
+#
+# RabbitMQ: start shared backend infra first (creates network sharks-infra):
+#   from backend/: docker compose up -d
+#   (or: docker compose -f ../docker-compose.yml up -d from this folder)
+#
+# Start (from backend/auth):
+#   docker compose up -d --build
+#
+# Required environment variables:
+#   SPRING_DATASOURCE_URL
+#   SPRING_DATASOURCE_USERNAME
+#   SPRING_DATASOURCE_PASSWORD
+#   SUPABASE_URL
+#   SUPABASE_ANON_KEY
+#   SUPABASE_SERVICE_ROLE_KEY
+
+services:
+  auth-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sharks-auth-api
+    restart: unless-stopped
+    networks:
+      - default
+      - sharks-infra
+    environment:
+      SERVER_PORT: "8080"
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SUPABASE_URL: ${SUPABASE_URL}
+      SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY}
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: "5672"
+      RABBITMQ_USERNAME: ${RABBITMQ_USERNAME:-guest}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-guest}
+    ports:
+      - "${AUTH_API_PORT:-8085}:8080"
+
+networks:
+  sharks-infra:
+    external: true

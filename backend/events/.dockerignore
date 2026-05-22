@@ -1,0 +1,21 @@
+# Gradle / build output
+.gradle/
+build/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+.project
+.classpath
+.settings/
+.nb-gradle/
+nbproject/
+
+# Git
+.git/
+.gitattributes
+.gitignore
+
+# Docs (not needed in image build)
+HELP.md

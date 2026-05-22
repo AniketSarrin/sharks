@@ -1,0 +1,35 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: sharks
+
+resources:
+  - namespace.yaml
+  - storageclass.yaml
+  - secrets.yaml
+  - rabbitmq-configmap.yaml
+  - rabbitmq-statefulset.yaml
+  - rabbitmq-service.yaml
+  - user-postgres-statefulset.yaml
+  - user-postgres-service.yaml
+  - event-postgres-statefulset.yaml
+  - event-postgres-service.yaml
+  - ticketing-postgres-statefulset.yaml
+  - ticketing-postgres-service.yaml
+  - ticketing-deployment.yaml
+  - ticketing-service.yaml
+  - auth-secret.yaml
+  - auth-deployment.yaml
+  - auth-service.yaml
+  - auth-hpa.yaml
+  - user-deployment.yaml
+  - user-service.yaml
+  - user-hpa.yaml
+  - events-deployment.yaml
+  - events-service.yaml
+  - events-hpa.yaml
+  - admin-deployment.yaml
+  - admin-service.yaml
+  - gateway-deployment.yaml
+  - gateway-service.yaml
+  - gateway-hpa.yaml

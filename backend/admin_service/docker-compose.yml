@@ -1,0 +1,23 @@
+name: sharks
+
+include:
+  - path: ../docker-compose.yml
+
+services:
+  admin-service:
+    build: .
+    networks:
+      - sharks-infra
+    depends_on:
+      user-postgres:
+        condition: service_healthy
+    ports:
+      - "${ADMIN_SERVICE_PORT:-8083}:8080"
+    environment:
+      SERVER_PORT: "8080"
+      # Same Postgres service and database as user_and_organizations (`user-postgres`, DB `sharks`).
+      SPRING_DATASOURCE_URL: jdbc:postgresql://user-postgres:5432/sharks
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      # OIDC discovery endpoint used to resolve issuer and JWKS for token verification (events/ticketing pattern)
+      SUPABASE_OIDC_DISCOVERY_URL: ${SUPABASE_OIDC_DISCOVERY_URL:-}

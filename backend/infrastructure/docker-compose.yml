@@ -1,0 +1,8 @@
+name: sharks
+
+# Same stack as ../docker-compose.yml (RabbitMQ + Postgres for user/event services).
+# From this folder: docker compose up -d
+# AMQP: localhost:5672 | Management UI: http://localhost:15672 (guest / guest by default)
+
+include:
+  - path: ../docker-compose.yml
