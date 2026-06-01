@@ -10,7 +10,7 @@ A multi-service event management platform: attendees discover and book events, o
 
 | Team member | Summary of contribution areas |
 | --- | --- |
-| **Ankush Makhijani** | Auth Service Lead (Spring Boot + Supabase GoTrue), Event & Ticketing Service Lead (Event/Ticket APIs, Payment Listener, Admin Moderation), Spring Security & JWT validation, Supabase Migrations & Row Level Security, RabbitMQ Event Publishing, Unit Tests |
+| **Ankush Makhijani** | Auth Service Lead (Spring Boot + Supabase GoTrue), Event & Ticketing Service Lead (Event/Ticket APIs, Payment Listener, Admin Moderation).Supabase Migrations & Row Level Security, RabbitMQ Event Publishing, Unit Tests |
 | **Aniket Sarrin** | User & Organizations Service, Admin Service, JWT Authentication, RabbitMQ Pub sub between User and Org service to auth service |
 | **Maurin Baroi** | Frontend Lead (React/TypeScript), Mock Payment Service, AWS Production Deployment (Elastic Beanstalk + ALB + API Gateway), Custom Domain & DNS, UI Wireframes, Architecture Diagrams, Documentation, Database migrations |
 
